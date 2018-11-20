@@ -18,6 +18,7 @@ def main(argv):
         return -1
 
     cv.namedWindow("detected circles", cv.WINDOW_NORMAL)
+
     # cv.resizeWindow("detected circles", 200)
 
     while True:
@@ -30,20 +31,28 @@ def main(argv):
                                   param1=130, param2=30,
                                   minRadius=100, maxRadius=300)
 
-        show = src
+        show = src.copy()
         if circles is not None:
             circles = np.uint16(np.around(circles))
             for i in circles[0, :]:
-                center = (i[0], i[1])
+                x, y, r = i
+                center = (x, y)
                 # circle center
                 cv.circle(show, center, 1, (0, 100, 100), 3)
                 # circle outline
-                radius = i[2]
-                cv.circle(show, center, radius, (255, 0, 255), 3)
+                cv.circle(show, center, r, (255, 0, 255), 3)
+
+                mask = np.zeros((rows, gray.shape[1], 3), dtype=np.uint8)
+                cv.circle(mask, (x, y), r, (255, 0, 0), -1, 8, 0)
+                out = show * mask
+                cv.namedWindow("img" + str(r), cv.WINDOW_NORMAL)
+                cv.imshow("img" + str(r), out)
 
         cv.imshow("detected circles", show)
 
-        cv.waitKey(0)
+        if cv.waitKey(1) in {1048603, 27}:
+            cv.destroyAllWindows()
+            break
 
     return 0
 

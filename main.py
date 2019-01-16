@@ -9,8 +9,8 @@ def nothing(x):
 
 
 photos = os.listdir('./Photos')
-
-img = cv2.imread("./Photos/" + photos[4], 0)
+print(photos)
+img = cv2.imread("./Photos/" + "z2_edit.png", 0)
 
 cv2.namedWindow("img", cv2.WINDOW_KEEPRATIO)
 
